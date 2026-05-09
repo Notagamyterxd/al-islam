@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { Play, Pause, SkipBack, SkipForward, Volume2, X, Repeat, Repeat1 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, X, Repeat, Repeat1, Gauge, FileText } from "lucide-react";
 import { usePlayer } from "@/stores/player";
 import { Slider } from "@/components/ui/slider";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,6 +14,7 @@ const fmt = (s: number) => {
 
 export function AudioPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [showSpeed, setShowSpeed] = useState(false);
   const {
     current,
     isPlaying,
@@ -23,6 +24,8 @@ export function AudioPlayer() {
     seek,
     loop,
     autoPlay,
+    playbackRate,
+    showTranscript,
     toggle,
     next,
     setProgress,
@@ -32,6 +35,8 @@ export function AudioPlayer() {
     clearSeek,
     stop,
     toggleLoop,
+    setPlaybackRate,
+    toggleTranscript,
   } = usePlayer();
 
   useEffect(() => {
@@ -54,6 +59,12 @@ export function AudioPlayer() {
     if (!a) return;
     a.loop = loop;
   }, [loop]);
+
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a) return;
+    a.playbackRate = playbackRate;
+  }, [playbackRate, current]);
 
   useEffect(() => {
     const a = audioRef.current;
@@ -132,6 +143,47 @@ export function AudioPlayer() {
                   >
                     {loop ? <Repeat1 className="h-4 w-4" /> : <Repeat className="h-4 w-4" />}
                   </button>
+                  <button
+                    onClick={toggleTranscript}
+                    className={`transition-colors ${showTranscript ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
+                    aria-label="Toggle transcript"
+                    title="Transcript (Arabic & Roman)"
+                  >
+                    <FileText className="h-4 w-4" />
+                  </button>
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowSpeed((s) => !s)}
+                      className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium transition-colors ${
+                        playbackRate !== 1
+                          ? "bg-primary/15 text-primary"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                      aria-label="Playback speed"
+                      title="Playback speed"
+                    >
+                      <Gauge className="h-3.5 w-3.5" />
+                      {playbackRate}x
+                    </button>
+                    {showSpeed && (
+                      <div className="absolute bottom-full right-0 mb-2 flex flex-col rounded-lg border border-border bg-popover py-1 shadow-xl">
+                        {[0.5, 0.75, 1, 1.25, 1.5, 1.75, 2].map((r) => (
+                          <button
+                            key={r}
+                            onClick={() => {
+                              setPlaybackRate(r);
+                              setShowSpeed(false);
+                            }}
+                            className={`px-4 py-1.5 text-left text-xs transition-colors hover:bg-muted ${
+                              playbackRate === r ? "text-primary" : "text-foreground"
+                            }`}
+                          >
+                            {r}x{r === 1 ? " · Normal" : ""}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="hidden w-full items-center gap-2 md:flex">
                   <span className="w-10 text-right text-[10px] tabular-nums text-muted-foreground">
