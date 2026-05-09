@@ -1,5 +1,5 @@
 import { Link, useRouter } from "@tanstack/react-router";
-import { Moon, LogIn, LogOut } from "lucide-react";
+import { BookOpen, LogIn, LogOut, Heart } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -14,43 +14,37 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/50 bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-6">
+      <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
         <Link to="/" className="group flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent-2 shadow-glow">
-            <Moon className="h-4 w-4 text-primary-foreground" />
+            <BookOpen className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="font-display text-xl tracking-tight text-foreground">Sukoon</span>
+          <span className="font-display text-lg tracking-tight text-foreground sm:text-xl">
+            Al-Quran
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="flex items-center gap-1 sm:gap-3">
           <Link
-            to="/reminders"
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            to="/"
+            className="rounded-full px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground sm:text-sm"
             activeProps={{ className: "text-foreground" }}
+            activeOptions={{ exact: true }}
           >
-            Reminders
-          </Link>
-          <Link
-            to="/music"
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-            activeProps={{ className: "text-foreground" }}
-          >
-            Chill Music
+            Surahs
           </Link>
           <Link
             to="/favorites"
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground sm:text-sm"
             activeProps={{ className: "text-foreground" }}
           >
+            <Heart className="h-3.5 w-3.5" />
             Favorites
           </Link>
-        </nav>
-
-        <div className="flex items-center gap-2">
           {user ? (
             <button
               onClick={signOut}
-              className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-xs text-foreground transition-colors hover:bg-muted"
+              className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-foreground transition-colors hover:bg-muted"
             >
               <LogOut className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Sign out</span>
@@ -58,13 +52,13 @@ export function Header() {
           ) : (
             <Link
               to="/auth"
-              className="flex items-center gap-2 rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground shadow-glow transition-transform hover:scale-105"
+              className="flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-glow transition-transform hover:scale-105"
             >
               <LogIn className="h-3.5 w-3.5" />
-              Sign in
+              <span className="hidden sm:inline">Sign in</span>
             </Link>
           )}
-        </div>
+        </nav>
       </div>
     </header>
   );
