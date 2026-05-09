@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { Play, Pause, SkipBack, SkipForward, Volume2, X, Repeat, Repeat1 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, X, Repeat, Repeat1, Gauge, FileText } from "lucide-react";
 import { usePlayer } from "@/stores/player";
 import { Slider } from "@/components/ui/slider";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,6 +14,7 @@ const fmt = (s: number) => {
 
 export function AudioPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [showSpeed, setShowSpeed] = useState(false);
   const {
     current,
     isPlaying,
@@ -23,6 +24,8 @@ export function AudioPlayer() {
     seek,
     loop,
     autoPlay,
+    playbackRate,
+    showTranscript,
     toggle,
     next,
     setProgress,
@@ -32,6 +35,8 @@ export function AudioPlayer() {
     clearSeek,
     stop,
     toggleLoop,
+    setPlaybackRate,
+    toggleTranscript,
   } = usePlayer();
 
   useEffect(() => {
@@ -54,6 +59,12 @@ export function AudioPlayer() {
     if (!a) return;
     a.loop = loop;
   }, [loop]);
+
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a) return;
+    a.playbackRate = playbackRate;
+  }, [playbackRate, current]);
 
   useEffect(() => {
     const a = audioRef.current;
