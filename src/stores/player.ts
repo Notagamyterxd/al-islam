@@ -11,6 +11,10 @@ interface PlayerState {
   loop: boolean;
   autoPlay: boolean;
   seek: number | null;
+  playbackRate: number;
+  showTranscript: boolean;
+  setPlaybackRate: (r: number) => void;
+  toggleTranscript: () => void;
   play: (surah: Surah, queue?: Surah[]) => void;
   toggle: () => void;
   stop: () => void;
@@ -36,6 +40,10 @@ export const usePlayer = create<PlayerState>((set, get) => ({
   loop: false,
   autoPlay: true,
   seek: null,
+  playbackRate: 1,
+  showTranscript: false,
+  setPlaybackRate: (r) => set({ playbackRate: r }),
+  toggleTranscript: () => set({ showTranscript: !get().showTranscript }),
   play: (surah, queue) =>
     set({
       current: surah,
