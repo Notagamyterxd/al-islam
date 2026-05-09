@@ -9,7 +9,7 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Sign in — Sukoon" },
-      { name: "description", content: "Sign in to save your favorite audios." },
+      { name: "description", content: "Sign in to save your favorite Surahs." },
     ],
   }),
   component: AuthPage,
