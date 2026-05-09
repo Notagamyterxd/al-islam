@@ -11,6 +11,7 @@ import {
 import appCss from "../styles.css?url";
 import { Header } from "@/components/Header";
 import { AudioPlayer } from "@/components/AudioPlayer";
+import { TranscriptPanel } from "@/components/TranscriptPanel";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -90,6 +91,7 @@ function RootComponent() {
         <main className="flex-1 pb-32">
           <Outlet />
         </main>
+        <TranscriptPanel />
         <AudioPlayer />
         <Toaster />
       </div>
