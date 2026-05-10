@@ -36,7 +36,7 @@ export function useNotificationPrefs() {
       .eq("user_id", user.id)
       .maybeSingle();
     if (data?.prefs) {
-      setPrefs({ ...DEFAULT_PREFS, ...(data.prefs as NotificationPrefs) });
+      setPrefs({ ...DEFAULT_PREFS, ...(data.prefs as unknown as NotificationPrefs) });
     }
     setLoaded(true);
   }, [user]);

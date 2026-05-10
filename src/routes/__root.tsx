@@ -12,6 +12,7 @@ import appCss from "../styles.css?url";
 import { Header } from "@/components/Header";
 import { AudioPlayer } from "@/components/AudioPlayer";
 import { TranscriptPanel } from "@/components/TranscriptPanel";
+import { NotificationScheduler } from "@/components/NotificationScheduler";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -93,6 +94,7 @@ function RootComponent() {
         </main>
         <TranscriptPanel />
         <AudioPlayer />
+        <NotificationScheduler />
         <Toaster />
       </div>
     </QueryClientProvider>
