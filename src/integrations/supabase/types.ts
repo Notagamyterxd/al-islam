@@ -35,6 +35,81 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_prefs: {
+        Row: {
+          prefs: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          prefs?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          prefs?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      prayer_logs: {
+        Row: {
+          completed_at: string
+          id: string
+          prayer_date: string
+          prayer_name: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          id?: string
+          prayer_date: string
+          prayer_name: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          id?: string
+          prayer_date?: string
+          prayer_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tasbih_sessions: {
+        Row: {
+          count: number
+          created_at: string
+          dhikr: string
+          id: string
+          rounds: number
+          session_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          count?: number
+          created_at?: string
+          dhikr?: string
+          id?: string
+          rounds?: number
+          session_date?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          count?: number
+          created_at?: string
+          dhikr?: string
+          id?: string
+          rounds?: number
+          session_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
