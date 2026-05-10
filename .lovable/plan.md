@@ -1,41 +1,50 @@
+# Plan: Namaz Tracker, Tasbih Counter & Notifications
 
-## What we're building
+Adds three new sections to the Al-Quran app, accessible via the header navigation.
 
-A calm, focused web app inspired by Sabr — a place for short Islamic reminders & duas, plus a dedicated section of chill background music for studying. Midnight Focus aesthetic (deep navy + electric indigo), built to feel peaceful and distraction-free.
+## 1. Prayer Times & Tracker (`/namaz`)
 
-## Pages (separate routes)
+- Fetch prayer times from the free **Aladhan API** (`https://api.aladhan.com/v1/timingsByCity`) for **Neuss, Germany**. (Muslim Pro has no public API; Aladhan is the standard free, accurate alternative — same data source most Islamic apps use.)
+- Display Fajr, Dhuhr, Asr, Maghrib, Isha with times and a "next prayer" countdown.
+- Each prayer has a "Mark as prayed" button — disabled (with lock icon + tooltip) until the prayer's scheduled time has passed.
+- Persist completions per user/date in a new `prayer_logs` table (one row per user/date/prayer).
+- Monthly calendar grid showing 5 dots per day (one per prayer) — green = completed, gray = missed, blue = upcoming. Hover/tap shows details.
 
-- `/` — Landing: hero with calming intro, quick links into Reminders, Chill Music, and Pomodoro
-- `/reminders` — Browse & play Islamic audio reminders and duas (cards with play buttons + a sticky bottom audio player)
-- `/music` — Chill lofi/ambient tracks for studying, with the Pomodoro timer side-by-side
-- `/favorites` — Saved audios (requires login)
-- `/auth` — Sign in / sign up
+## 2. Tasbih Counter (`/tasbih`)
 
-## Key features
+- Large tap target: counter increments on click. Big haptic-feel button.
+- Counter resets to 0 after 100 → rounds++. Display current count, rounds today, total rounds this month.
+- Reset button + dhikr selector (SubhanAllah / Alhamdulillah / Allahu Akbar) to label sessions.
+- Persist sessions in `tasbih_sessions` table (user_id, dhikr, count, rounds, date).
 
-1. **Audio library** — placeholder demo audio URLs (free CC tracks) categorized: Quran recitations, duas, short reminders, lofi study, ambient, nature sounds. Each item has title, category, duration, cover gradient.
-2. **Persistent player** — sticky bottom bar with play/pause, scrub, volume, track title. Stays mounted across route changes via root layout.
-3. **Pomodoro timer** — 25/5 default, configurable, with start/pause/reset and session counter. Lives on `/music` so users can study + listen together.
-4. **Favorites** — heart icon on each track; saved per user in Lovable Cloud.
-5. **Auth** — email/password via Lovable Cloud (required only for favorites; everything else works logged out).
+## 3. Notifications (`/settings/notifications`)
 
-## Design direction
+- Browser Push API with `Notification.requestPermission()`.
+- Per-prayer toggle + "minutes before" selector (0/5/10/15).
+- Tasbih reminder: toggle + frequency (daily at chosen time, or every X hours).
+- Stored in `notification_prefs` table (user_id, settings json).
+- A client-side scheduler (in a root-level provider using `setTimeout`) compares prayer times to current time and fires `new Notification(...)`. Runs while the tab is open. (True push requires a service worker + VAPID infra — out of scope for the browser-only "reliable" requirement; we'll note this clearly in the UI.)
 
-- **Palette**: `#0a0a1a` background, `#141432` surfaces, `#1e1e5a` elevated cards, `#4f46e5` electric indigo accent, soft white foreground. Subtle indigo glow on hover/active states.
-- **Typography**: Instrument Serif for headings (calm, contemplative), Inter for body.
-- **Mood**: Generous spacing, soft star/particle background on hero, gentle fade-in animations via framer-motion. No loud gradients — restrained, meditative.
-- All colors as semantic tokens in `src/styles.css` (oklch).
+## Database (one migration)
 
-## Technical notes
+- `prayer_logs` (user_id, prayer_date, prayer_name, completed_at) — RLS: own rows.
+- `tasbih_sessions` (user_id, dhikr, count, rounds, session_date) — RLS: own rows.
+- `notification_prefs` (user_id PK, prefs jsonb) — RLS: own row.
 
-- TanStack Start file-based routes: `index.tsx`, `reminders.tsx`, `music.tsx`, `favorites.tsx`, `auth.tsx`. Each with own `head()` metadata.
-- Persistent player implemented via a Zustand store + `<AudioPlayer />` rendered in `__root.tsx` (so it survives route changes).
-- Lovable Cloud enabled for: auth + a `favorites` table (`user_id`, `audio_id`, `created_at`) with RLS so users only see their own.
-- Audio data: a static `src/data/audios.ts` array of demo tracks (no DB needed for the catalog itself).
-- framer-motion for animations; shadcn components for buttons, dialog, slider.
+## Header / Nav
 
-## Out of scope (for now)
+Update `Header.tsx` to include: Surahs · Namaz · Tasbih · Favorites · Settings.
 
-- User-uploaded audio
-- Playlists / queues beyond next/prev within a category
-- Mobile native features
+## Files
+
+- New: `src/routes/namaz.tsx`, `src/routes/tasbih.tsx`, `src/routes/settings.notifications.tsx`
+- New: `src/components/PrayerCard.tsx`, `src/components/MonthlyPrayerCalendar.tsx`, `src/components/TasbihCounter.tsx`, `src/components/NotificationScheduler.tsx`
+- New: `src/hooks/use-prayer-times.ts`, `src/hooks/use-prayer-logs.ts`, `src/hooks/use-tasbih.ts`, `src/hooks/use-notification-prefs.ts`
+- Modified: `src/components/Header.tsx`, `src/routes/__root.tsx` (mount NotificationScheduler)
+- Migration: 3 new tables with RLS
+
+## Notes for the user
+
+- Prayer times come from Aladhan (free, no key needed) — Muslim Pro doesn't expose a public API.
+- Notifications fire only while the app tab is open (browser limitation without a backend push service).
+- Login required to track prayers/tasbih (same auth as Favorites).
