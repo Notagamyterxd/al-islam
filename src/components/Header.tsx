@@ -1,5 +1,5 @@
 import { Link, useRouter } from "@tanstack/react-router";
-import { BookOpen, LogIn, LogOut, Heart, Moon, Sparkles, Bell } from "lucide-react";
+import { BookOpen, LogIn, LogOut, Heart, Moon, Sparkles, Bell, Music2 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 
