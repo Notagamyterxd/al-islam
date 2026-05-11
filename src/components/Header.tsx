@@ -31,6 +31,10 @@ export function Header() {
             <BookOpen className="h-3.5 w-3.5 sm:hidden" />
             <span className="hidden sm:inline">Surahs</span>
           </Link>
+          <Link to="/hamd-naat" className={navLink} activeProps={{ className: "text-foreground" }}>
+            <Music2 className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Hamd & Naat</span>
+          </Link>
           <Link to="/namaz" className={navLink} activeProps={{ className: "text-foreground" }}>
             <Moon className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Namaz</span>
