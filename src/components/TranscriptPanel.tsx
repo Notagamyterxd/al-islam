@@ -25,8 +25,9 @@ export function TranscriptPanel() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["transcript", current?.id],
     queryFn: () => fetchSurahTranscript(current!.id),
-    enabled: !!current && showTranscript,
+    enabled: !!current,
     staleTime: Infinity,
+    gcTime: Infinity,
   });
 
   // Approximate active ayah from progress (linear estimate across verses)
