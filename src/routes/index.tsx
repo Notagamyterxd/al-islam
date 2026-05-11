@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Search, BookOpen } from "lucide-react";
 import { surahs } from "@/data/surahs";
 import { SurahRow } from "@/components/SurahRow";
+import { HamdNaatSection } from "@/components/HamdNaatSection";
 import { usePlayer } from "@/stores/player";
 
 export const Route = createFileRoute("/")({
