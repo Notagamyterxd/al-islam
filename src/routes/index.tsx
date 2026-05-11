@@ -3,7 +3,6 @@ import { useMemo, useState } from "react";
 import { Search, BookOpen } from "lucide-react";
 import { surahs } from "@/data/surahs";
 import { SurahRow } from "@/components/SurahRow";
-import { HamdNaatSection } from "@/components/HamdNaatSection";
 import { usePlayer } from "@/stores/player";
 
 export const Route = createFileRoute("/")({
@@ -45,8 +44,6 @@ function HomePage() {
           Listen to all 114 Surahs · recited by Mishary Rashid Alafasy
         </p>
       </div>
-
-      <HamdNaatSection />
 
       <div className="sticky top-16 z-30 mt-12 -mx-4 bg-background/80 px-4 py-3 backdrop-blur-xl sm:mx-0 sm:rounded-2xl sm:px-4">
         <div className="flex items-center gap-2">
