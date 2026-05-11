@@ -16,6 +16,8 @@ const tracks: Track[] = [
   { id: "h6", title: "Faslun Min Al-Madeeh", artist: "Mishary Alafasy", hue: 46 },
   { id: "h7", title: "Allahu Allahu", artist: "Sami Yusuf", hue: 162 },
   { id: "h8", title: "Mustafa Jaan-e-Rehmat", artist: "Owais Raza Qadri", hue: 40 },
+  { id: "h9", title: "Chal Deen Ki Tabligh (Urdu Version)", artist: "Shaz Khan", hue: 150 },
+  { id: "h10", title: "Mohabbat Ke Sajday", artist: "Unknown", hue: 36 },
 ];
 
 function GeometricPattern({ hue }: { hue: number }) {
