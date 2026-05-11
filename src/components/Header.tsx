@@ -1,5 +1,5 @@
 import { Link, useRouter } from "@tanstack/react-router";
-import { BookOpen, LogIn, LogOut, Heart, Moon, Sparkles, Bell } from "lucide-react";
+import { BookOpen, LogIn, LogOut, Heart, Moon, Sparkles, Bell, Music2 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -30,6 +30,10 @@ export function Header() {
           <Link to="/" className={navLink} activeProps={{ className: "text-foreground" }} activeOptions={{ exact: true }}>
             <BookOpen className="h-3.5 w-3.5 sm:hidden" />
             <span className="hidden sm:inline">Surahs</span>
+          </Link>
+          <Link to="/hamd-naat" className={navLink} activeProps={{ className: "text-foreground" }}>
+            <Music2 className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Hamd & Naat</span>
           </Link>
           <Link to="/namaz" className={navLink} activeProps={{ className: "text-foreground" }}>
             <Moon className="h-3.5 w-3.5" />

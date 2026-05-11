@@ -65,22 +65,24 @@ function GeometricPattern({ hue }: { hue: number }) {
   );
 }
 
-export function HamdNaatSection() {
+export function HamdNaatSection({ hideHeader = false }: { hideHeader?: boolean } = {}) {
   return (
-    <section className="mx-auto mt-16 max-w-6xl px-4 sm:px-6">
-      <div className="mb-6 flex items-end justify-between gap-4">
-        <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-accent-2">
-            Devotional
-          </p>
-          <h2 className="mt-1 font-display text-2xl text-foreground sm:text-3xl">
-            Hamd &amp; Naat
-          </h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Praises of Allah and the Prophet ﷺ
-          </p>
+    <section className="mx-auto mt-10 max-w-6xl px-0 sm:px-0">
+      {!hideHeader && (
+        <div className="mb-6 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.2em] text-accent-2">
+              Devotional
+            </p>
+            <h2 className="mt-1 font-display text-2xl text-foreground sm:text-3xl">
+              Hamd &amp; Naat
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Praises of Allah and the Prophet ﷺ
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
         {tracks.map((t) => (
