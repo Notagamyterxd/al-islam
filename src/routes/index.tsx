@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Search, BookOpen } from "lucide-react";
 import { surahs } from "@/data/surahs";
 import { SurahRow } from "@/components/SurahRow";
+import { HamdNaatSection } from "@/components/HamdNaatSection";
 import { usePlayer } from "@/stores/player";
 
 export const Route = createFileRoute("/")({
@@ -45,7 +46,9 @@ function HomePage() {
         </p>
       </div>
 
-      <div className="sticky top-16 z-30 mt-8 -mx-4 bg-background/80 px-4 py-3 backdrop-blur-xl sm:mx-0 sm:rounded-2xl sm:px-4">
+      <HamdNaatSection />
+
+      <div className="sticky top-16 z-30 mt-12 -mx-4 bg-background/80 px-4 py-3 backdrop-blur-xl sm:mx-0 sm:rounded-2xl sm:px-4">
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
