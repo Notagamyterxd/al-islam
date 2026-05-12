@@ -22,7 +22,7 @@ export function Header() {
             <BookOpen className="h-4 w-4 text-primary-foreground" />
           </div>
           <span className="font-display text-lg tracking-tight text-foreground sm:text-xl">
-            Al-Quran
+            Al-Islam
           </span>
         </Link>
 
