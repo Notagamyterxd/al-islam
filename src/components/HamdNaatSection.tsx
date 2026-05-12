@@ -202,25 +202,11 @@ function NaatCard({
 export function HamdNaatSection({ hideHeader = false }: { hideHeader?: boolean } = {}) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playingId, setPlayingId] = useState<string | null>(null);
-  const [available, setAvailable] = useState<Record<string, number>>({}); // id -> version (cache-bust)
-
-  // Probe which tracks already have audio uploaded.
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const { data } = await supabase.storage.from(BUCKET).list("", { limit: 100 });
-      if (cancelled || !data) return;
-      const map: Record<string, number> = {};
-      for (const obj of data) {
-        const id = obj.name.replace(/\.[^.]+$/, "");
-        map[id] = Date.now();
-      }
-      setAvailable(map);
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  // All curated tracks have audio pre-uploaded. Bucket listing is admin-only,
+  // but the files themselves are served via public URLs.
+  const [available, setAvailable] = useState<Record<string, number>>(() =>
+    Object.fromEntries(tracks.map((t) => [t.id, 1])),
+  );
 
   const togglePlay = (track: Track, url: string | null) => {
     if (!url) return;
