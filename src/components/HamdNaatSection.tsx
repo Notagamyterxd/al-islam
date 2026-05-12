@@ -14,12 +14,6 @@ type Track = {
 const tracks: Track[] = [
   { id: "h1", title: "Maula Ya Salli", artist: "Sami Yusuf", hue: 158 },
   { id: "h2", title: "Hasbi Rabbi", artist: "Sami Yusuf", hue: 42 },
-  { id: "h3", title: "Tala'al Badru Alayna", artist: "Mesut Kurtis", hue: 168 },
-  { id: "h4", title: "Qaseeda Burda Shareef", artist: "Mehmood ul Hassan", hue: 38 },
-  { id: "h5", title: "Ya Nabi Salam Alayka", artist: "Maher Zain", hue: 152 },
-  { id: "h6", title: "Faslun Min Al-Madeeh", artist: "Mishary Alafasy", hue: 46 },
-  { id: "h7", title: "Allahu Allahu", artist: "Sami Yusuf", hue: 162 },
-  { id: "h8", title: "Mustafa Jaan-e-Rehmat", artist: "Owais Raza Qadri", hue: 40 },
   { id: "h9", title: "Chal Deen Ki Tabligh (Urdu Version)", artist: "Shaz Khan", hue: 150 },
   { id: "h10", title: "Mohabbat Ke Sajday", artist: "Unknown", hue: 36 },
 ];
