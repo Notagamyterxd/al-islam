@@ -110,9 +110,9 @@ function NaatCard({
       if (error) throw error;
       toast.success(`Uploaded "${track.title}"`);
       onUploaded(track.id);
-    } catch (err) {
-      console.error(err);
-      toast.error("Upload failed");
+    } catch (err: any) {
+      console.error("Naat upload failed:", err);
+      toast.error(err?.message ? `Upload failed: ${err.message}` : "Upload failed");
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
