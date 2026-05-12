@@ -76,10 +76,35 @@ function NaatCard({
   const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!user) {
+      setIsAdmin(false);
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      if (!cancelled) setIsAdmin(!!data);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
 
   const handleUploadClick = () => {
     if (!user) {
       toast.error("Please sign in to upload audio");
+      return;
+    }
+    if (!isAdmin) {
+      toast.error("Only admins can upload audio");
       return;
     }
     fileInputRef.current?.click();
@@ -127,15 +152,17 @@ function NaatCard({
         <GeometricPattern hue={track.hue} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent" />
 
-        <button
-          type="button"
-          onClick={handleUploadClick}
-          disabled={uploading}
-          aria-label={`Upload audio for ${track.title}`}
-          className="absolute left-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition hover:bg-black/60 disabled:opacity-50"
-        >
-          {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
-        </button>
+        {isAdmin && (
+          <button
+            type="button"
+            onClick={handleUploadClick}
+            disabled={uploading}
+            aria-label={`Upload audio for ${track.title}`}
+            className="absolute left-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition hover:bg-black/60 disabled:opacity-50"
+          >
+            {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
+          </button>
+        )}
 
         {hasAudio && (
           <span className="absolute right-2 top-2 rounded-full bg-primary/90 px-2 py-0.5 text-[10px] font-medium text-primary-foreground">
@@ -175,25 +202,11 @@ function NaatCard({
 export function HamdNaatSection({ hideHeader = false }: { hideHeader?: boolean } = {}) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playingId, setPlayingId] = useState<string | null>(null);
-  const [available, setAvailable] = useState<Record<string, number>>({}); // id -> version (cache-bust)
-
-  // Probe which tracks already have audio uploaded.
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const { data } = await supabase.storage.from(BUCKET).list("", { limit: 100 });
-      if (cancelled || !data) return;
-      const map: Record<string, number> = {};
-      for (const obj of data) {
-        const id = obj.name.replace(/\.[^.]+$/, "");
-        map[id] = Date.now();
-      }
-      setAvailable(map);
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  // All curated tracks have audio pre-uploaded. Bucket listing is admin-only,
+  // but the files themselves are served via public URLs.
+  const [available, setAvailable] = useState<Record<string, number>>(() =>
+    Object.fromEntries(tracks.map((t) => [t.id, 1])),
+  );
 
   const togglePlay = (track: Track, url: string | null) => {
     if (!url) return;
