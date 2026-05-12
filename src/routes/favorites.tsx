@@ -7,7 +7,7 @@ import { Heart } from "lucide-react";
 export const Route = createFileRoute("/favorites")({
   head: () => ({
     meta: [
-      { title: "Your Favorite Surahs — Al-Quran Audio Player" },
+      { title: "Your Favorite Surahs — Al-Islam Audio Player" },
       { name: "description", content: "Surahs you've saved to come back to." },
       { property: "og:title", content: "Your Favorite Surahs" },
       { property: "og:description", content: "Saved Surahs from the Holy Quran." },

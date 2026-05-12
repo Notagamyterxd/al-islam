@@ -8,9 +8,9 @@ import { usePlayer } from "@/stores/player";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Al-Quran Audio Player — Listen to all 114 Surahs" },
+      { title: "Al-Islam Audio Player — Listen to all 114 Surahs" },
       { name: "description", content: "Stream high-quality recitations of all 114 Surahs of the Holy Quran. Search, favorite and listen with a clean, ad-free player." },
-      { property: "og:title", content: "Al-Quran Audio Player" },
+      { property: "og:title", content: "Al-Islam Audio Player" },
       { property: "og:description", content: "Listen to all 114 Surahs of the Holy Quran with high-quality recitations." },
     ],
   }),
@@ -39,7 +39,7 @@ function HomePage() {
         <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent-2 shadow-glow">
           <BookOpen className="h-6 w-6 text-primary-foreground" />
         </div>
-        <h1 className="font-display text-4xl text-foreground sm:text-6xl">Al-Quran</h1>
+        <h1 className="font-display text-4xl text-foreground sm:text-6xl">Al-Islam</h1>
         <p className="mt-3 text-sm text-muted-foreground sm:text-base">
           Listen to all 114 Surahs · recited by Mishary Rashid Alafasy
         </p>
