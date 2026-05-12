@@ -76,10 +76,35 @@ function NaatCard({
   const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!user) {
+      setIsAdmin(false);
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      if (!cancelled) setIsAdmin(!!data);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
 
   const handleUploadClick = () => {
     if (!user) {
       toast.error("Please sign in to upload audio");
+      return;
+    }
+    if (!isAdmin) {
+      toast.error("Only admins can upload audio");
       return;
     }
     fileInputRef.current?.click();
