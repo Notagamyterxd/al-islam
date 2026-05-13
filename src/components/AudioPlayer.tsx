@@ -107,7 +107,7 @@ export function AudioPlayer() {
                     {current.id}. {current.name}
                   </p>
                   <p className="truncate text-xs text-muted-foreground">
-                    {current.translated} · {current.verses} ayahs
+                    {current.subtitle ?? `${current.translated} · ${current.verses} ayahs`}
                   </p>
                 </div>
               </div>
