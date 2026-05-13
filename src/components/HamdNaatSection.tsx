@@ -1,20 +1,21 @@
 import { Pause, Play } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { usePlayer } from "@/stores/player";
+import type { Surah } from "@/data/surahs";
 
 type Track = {
   id: string;
+  numericId: number;
   title: string;
   artist: string;
   hue: number;
 };
 
 const tracks: Track[] = [
-  { id: "h1", title: "Maula Ya Salli", artist: "Sami Yusuf", hue: 158 },
-  { id: "h2", title: "Hasbi Rabbi", artist: "Sami Yusuf", hue: 42 },
-  { id: "h9", title: "Chal Deen Ki Tabligh (Urdu Version)", artist: "Shaz Khan", hue: 150 },
-  { id: "h10", title: "Mohabbat Ke Sajday", artist: "Shaz Khan", hue: 36 },
+  { id: "h1", numericId: -1, title: "Maula Ya Salli", artist: "Sami Yusuf", hue: 158 },
+  { id: "h2", numericId: -2, title: "Hasbi Rabbi", artist: "Sami Yusuf", hue: 42 },
+  { id: "h9", numericId: -9, title: "Chal Deen Ki Tabligh (Urdu Version)", artist: "Shaz Khan", hue: 150 },
+  { id: "h10", numericId: -10, title: "Mohabbat Ke Sajday", artist: "Shaz Khan", hue: 36 },
 ];
 
 const BUCKET = "naat-audio";
@@ -23,6 +24,21 @@ function publicUrl(trackId: string, ext = "mp3") {
   const { data } = supabase.storage.from(BUCKET).getPublicUrl(`${trackId}.${ext}`);
   return data.publicUrl;
 }
+
+function toSurah(t: Track): Surah {
+  return {
+    id: t.numericId,
+    name: t.title,
+    arabic: "",
+    translated: t.artist,
+    place: "makkah",
+    verses: 0,
+    audioSrc: `${publicUrl(t.id)}?v=2`,
+    subtitle: t.artist,
+  };
+}
+
+const queue: Surah[] = tracks.map(toSurah);
 
 function GeometricPattern({ hue }: { hue: number }) {
   const c1 = `oklch(0.55 0.12 ${hue})`;
@@ -56,17 +72,16 @@ function GeometricPattern({ hue }: { hue: number }) {
   );
 }
 
-function NaatCard({
-  track,
-  isPlaying,
-  onTogglePlay,
-  audioUrl,
-}: {
-  track: Track;
-  isPlaying: boolean;
-  onTogglePlay: (url: string) => void;
-  audioUrl: string;
-}) {
+function NaatCard({ track }: { track: Track }) {
+  const { current, isPlaying, play, toggle } = usePlayer();
+  const isCurrent = current?.id === track.numericId;
+  const playing = isCurrent && isPlaying;
+
+  const onClick = () => {
+    if (isCurrent) toggle();
+    else play(toSurah(track), queue);
+  };
+
   return (
     <article className="group relative overflow-hidden rounded-2xl border border-border bg-card p-3 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-glow">
       <div className="relative aspect-square overflow-hidden rounded-xl">
@@ -75,11 +90,11 @@ function NaatCard({
 
         <button
           type="button"
-          onClick={() => onTogglePlay(audioUrl)}
-          aria-label={`${isPlaying ? "Pause" : "Play"} ${track.title}`}
+          onClick={onClick}
+          aria-label={`${playing ? "Pause" : "Play"} ${track.title}`}
           className="absolute bottom-2 right-2 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-glow transition-transform hover:scale-110 group-hover:scale-105"
         >
-          {isPlaying ? (
+          {playing ? (
             <Pause className="h-4 w-4" fill="currentColor" />
           ) : (
             <Play className="ml-0.5 h-4 w-4" fill="currentColor" />
@@ -95,36 +110,6 @@ function NaatCard({
 }
 
 export function HamdNaatSection({ hideHeader = false }: { hideHeader?: boolean } = {}) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [playingId, setPlayingId] = useState<string | null>(null);
-
-  const togglePlay = (track: Track, url: string) => {
-    if (playingId === track.id) {
-      audioRef.current?.pause();
-      setPlayingId(null);
-      return;
-    }
-    audioRef.current?.pause();
-    const audio = new Audio(url);
-    audioRef.current = audio;
-    audio.onended = () => setPlayingId((p) => (p === track.id ? null : p));
-    audio.onerror = () => {
-      toast.error("Could not play this audio file");
-      setPlayingId(null);
-    };
-    audio.play().catch(() => {
-      toast.error("Playback failed");
-      setPlayingId(null);
-    });
-    setPlayingId(track.id);
-  };
-
-  useEffect(() => {
-    return () => {
-      audioRef.current?.pause();
-    };
-  }, []);
-
   return (
     <section className="mx-auto mt-10 max-w-6xl px-0 sm:px-0">
       {!hideHeader && (
@@ -143,13 +128,7 @@ export function HamdNaatSection({ hideHeader = false }: { hideHeader?: boolean }
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
         {tracks.map((t) => (
-          <NaatCard
-            key={t.id}
-            track={t}
-            isPlaying={playingId === t.id}
-            audioUrl={`${publicUrl(t.id)}?v=2`}
-            onTogglePlay={(u) => togglePlay(t, u)}
-          />
+          <NaatCard key={t.id} track={t} />
         ))}
       </div>
     </section>

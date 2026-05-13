@@ -42,7 +42,7 @@ export function AudioPlayer() {
   useEffect(() => {
     const a = audioRef.current;
     if (!a || !current) return;
-    const url = audioUrl(current.id);
+    const url = current.audioSrc ?? audioUrl(current.id);
     if (a.src !== url) a.src = url;
     if (isPlaying) a.play().catch(() => {});
     else a.pause();
@@ -100,14 +100,16 @@ export function AudioPlayer() {
               {/* Track info */}
               <div className="flex min-w-0 flex-1 items-center gap-3">
                 <div className="flex h-12 w-12 flex-none items-center justify-center rounded-md bg-gradient-to-br from-primary to-accent-2 shadow-glow">
-                  <span className="text-xs font-medium text-primary-foreground">{current.id}</span>
+                  <span className="text-xs font-medium text-primary-foreground">
+                    {current.subtitle ? "♪" : current.id}
+                  </span>
                 </div>
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-foreground">
-                    {current.id}. {current.name}
+                    {current.subtitle ? current.name : `${current.id}. ${current.name}`}
                   </p>
                   <p className="truncate text-xs text-muted-foreground">
-                    {current.translated} · {current.verses} ayahs
+                    {current.subtitle ?? `${current.translated} · ${current.verses} ayahs`}
                   </p>
                 </div>
               </div>
