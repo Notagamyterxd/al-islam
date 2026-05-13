@@ -42,7 +42,7 @@ export function AudioPlayer() {
   useEffect(() => {
     const a = audioRef.current;
     if (!a || !current) return;
-    const url = audioUrl(current.id);
+    const url = current.audioSrc ?? audioUrl(current.id);
     if (a.src !== url) a.src = url;
     if (isPlaying) a.play().catch(() => {});
     else a.pause();
