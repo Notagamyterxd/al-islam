@@ -13,7 +13,7 @@ type Track = {
 const tracks: Track[] = [
   { id: "h1", title: "Maula Ya Salli", artist: "Sami Yusuf", hue: 158 },
   { id: "h2", title: "Hasbi Rabbi", artist: "Sami Yusuf", hue: 42 },
-  { id: "h9", title: "Chal Deen Ki Tabligh (Urdu Version)", artist: "Shaz Khan", hue: 150 },
+  { id: "h9", title: "Chal Deen Ki Tabligh", artist: "Shaz Khan", hue: 150 },
   { id: "h10", title: "Mohabbat Ke Sajday", artist: "Shaz Khan", hue: 36 },
 ];
 
