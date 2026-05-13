@@ -5,6 +5,10 @@ export type Surah = {
   translated: string;
   place: "makkah" | "madinah";
   verses: number;
+  /** Override audio source URL (used by non-Surah tracks like Hamd & Naat). */
+  audioSrc?: string;
+  /** Override subtitle shown in the player. */
+  subtitle?: string;
 };
 
 export const surahs: Surah[] = [
