@@ -160,7 +160,7 @@ function ChatInner({ threadId, initialMessages }: { threadId: string; initialMes
           }}
         >
           <PromptInputTextarea
-            ref={textareaRef}
+            data-deen-input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask Deen AI about Islam…"
