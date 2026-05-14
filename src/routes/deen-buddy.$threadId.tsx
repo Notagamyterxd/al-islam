@@ -79,10 +79,10 @@ function ChatInner({ threadId, initialMessages }: { threadId: string; initialMes
   });
 
   const [input, setInput] = useState("");
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    textareaRef.current?.focus();
+    const el = document.querySelector<HTMLTextAreaElement>("textarea[data-deen-input]");
+    el?.focus();
   }, [threadId, status]);
 
   const submit = async (text: string) => {
