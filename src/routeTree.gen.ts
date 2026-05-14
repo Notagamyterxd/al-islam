@@ -13,6 +13,7 @@ import { Route as TasbihRouteImport } from './routes/tasbih'
 import { Route as NamazRouteImport } from './routes/namaz'
 import { Route as HamdNaatRouteImport } from './routes/hamd-naat'
 import { Route as FavoritesRouteImport } from './routes/favorites'
+import { Route as DeenBuddyRouteImport } from './routes/deen-buddy'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsNotificationsRouteImport } from './routes/settings.notifications'
@@ -36,6 +37,11 @@ const HamdNaatRoute = HamdNaatRouteImport.update({
 const FavoritesRoute = FavoritesRouteImport.update({
   id: '/favorites',
   path: '/favorites',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeenBuddyRoute = DeenBuddyRouteImport.update({
+  id: '/deen-buddy',
+  path: '/deen-buddy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -62,6 +68,7 @@ const ApiDeenChatRoute = ApiDeenChatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/deen-buddy': typeof DeenBuddyRoute
   '/favorites': typeof FavoritesRoute
   '/hamd-naat': typeof HamdNaatRoute
   '/namaz': typeof NamazRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/deen-buddy': typeof DeenBuddyRoute
   '/favorites': typeof FavoritesRoute
   '/hamd-naat': typeof HamdNaatRoute
   '/namaz': typeof NamazRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/deen-buddy': typeof DeenBuddyRoute
   '/favorites': typeof FavoritesRoute
   '/hamd-naat': typeof HamdNaatRoute
   '/namaz': typeof NamazRoute
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/deen-buddy'
     | '/favorites'
     | '/hamd-naat'
     | '/namaz'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/deen-buddy'
     | '/favorites'
     | '/hamd-naat'
     | '/namaz'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/auth'
+    | '/deen-buddy'
     | '/favorites'
     | '/hamd-naat'
     | '/namaz'
@@ -126,6 +138,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  DeenBuddyRoute: typeof DeenBuddyRoute
   FavoritesRoute: typeof FavoritesRoute
   HamdNaatRoute: typeof HamdNaatRoute
   NamazRoute: typeof NamazRoute
@@ -164,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FavoritesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/deen-buddy': {
+      id: '/deen-buddy'
+      path: '/deen-buddy'
+      fullPath: '/deen-buddy'
+      preLoaderRoute: typeof DeenBuddyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -198,6 +218,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  DeenBuddyRoute: DeenBuddyRoute,
   FavoritesRoute: FavoritesRoute,
   HamdNaatRoute: HamdNaatRoute,
   NamazRoute: NamazRoute,
@@ -208,3 +229,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
