@@ -13,9 +13,13 @@ import { Route as TasbihRouteImport } from './routes/tasbih'
 import { Route as NamazRouteImport } from './routes/namaz'
 import { Route as HamdNaatRouteImport } from './routes/hamd-naat'
 import { Route as FavoritesRouteImport } from './routes/favorites'
+import { Route as DeenBuddyRouteImport } from './routes/deen-buddy'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DeenBuddyIndexRouteImport } from './routes/deen-buddy.index'
 import { Route as SettingsNotificationsRouteImport } from './routes/settings.notifications'
+import { Route as DeenBuddyThreadIdRouteImport } from './routes/deen-buddy.$threadId'
+import { Route as ApiDeenChatRouteImport } from './routes/api/deen-chat'
 
 const TasbihRoute = TasbihRouteImport.update({
   id: '/tasbih',
@@ -37,6 +41,11 @@ const FavoritesRoute = FavoritesRouteImport.update({
   path: '/favorites',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeenBuddyRoute = DeenBuddyRouteImport.update({
+  id: '/deen-buddy',
+  path: '/deen-buddy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -47,20 +56,39 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeenBuddyIndexRoute = DeenBuddyIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DeenBuddyRoute,
+} as any)
 const SettingsNotificationsRoute = SettingsNotificationsRouteImport.update({
   id: '/settings/notifications',
   path: '/settings/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeenBuddyThreadIdRoute = DeenBuddyThreadIdRouteImport.update({
+  id: '/$threadId',
+  path: '/$threadId',
+  getParentRoute: () => DeenBuddyRoute,
+} as any)
+const ApiDeenChatRoute = ApiDeenChatRouteImport.update({
+  id: '/api/deen-chat',
+  path: '/api/deen-chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/deen-buddy': typeof DeenBuddyRouteWithChildren
   '/favorites': typeof FavoritesRoute
   '/hamd-naat': typeof HamdNaatRoute
   '/namaz': typeof NamazRoute
   '/tasbih': typeof TasbihRoute
+  '/api/deen-chat': typeof ApiDeenChatRoute
+  '/deen-buddy/$threadId': typeof DeenBuddyThreadIdRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
+  '/deen-buddy/': typeof DeenBuddyIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -69,28 +97,39 @@ export interface FileRoutesByTo {
   '/hamd-naat': typeof HamdNaatRoute
   '/namaz': typeof NamazRoute
   '/tasbih': typeof TasbihRoute
+  '/api/deen-chat': typeof ApiDeenChatRoute
+  '/deen-buddy/$threadId': typeof DeenBuddyThreadIdRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
+  '/deen-buddy': typeof DeenBuddyIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/deen-buddy': typeof DeenBuddyRouteWithChildren
   '/favorites': typeof FavoritesRoute
   '/hamd-naat': typeof HamdNaatRoute
   '/namaz': typeof NamazRoute
   '/tasbih': typeof TasbihRoute
+  '/api/deen-chat': typeof ApiDeenChatRoute
+  '/deen-buddy/$threadId': typeof DeenBuddyThreadIdRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
+  '/deen-buddy/': typeof DeenBuddyIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
+    | '/deen-buddy'
     | '/favorites'
     | '/hamd-naat'
     | '/namaz'
     | '/tasbih'
+    | '/api/deen-chat'
+    | '/deen-buddy/$threadId'
     | '/settings/notifications'
+    | '/deen-buddy/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -99,25 +138,34 @@ export interface FileRouteTypes {
     | '/hamd-naat'
     | '/namaz'
     | '/tasbih'
+    | '/api/deen-chat'
+    | '/deen-buddy/$threadId'
     | '/settings/notifications'
+    | '/deen-buddy'
   id:
     | '__root__'
     | '/'
     | '/auth'
+    | '/deen-buddy'
     | '/favorites'
     | '/hamd-naat'
     | '/namaz'
     | '/tasbih'
+    | '/api/deen-chat'
+    | '/deen-buddy/$threadId'
     | '/settings/notifications'
+    | '/deen-buddy/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  DeenBuddyRoute: typeof DeenBuddyRouteWithChildren
   FavoritesRoute: typeof FavoritesRoute
   HamdNaatRoute: typeof HamdNaatRoute
   NamazRoute: typeof NamazRoute
   TasbihRoute: typeof TasbihRoute
+  ApiDeenChatRoute: typeof ApiDeenChatRoute
   SettingsNotificationsRoute: typeof SettingsNotificationsRoute
 }
 
@@ -151,6 +199,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FavoritesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/deen-buddy': {
+      id: '/deen-buddy'
+      path: '/deen-buddy'
+      fullPath: '/deen-buddy'
+      preLoaderRoute: typeof DeenBuddyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -165,6 +220,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/deen-buddy/': {
+      id: '/deen-buddy/'
+      path: '/'
+      fullPath: '/deen-buddy/'
+      preLoaderRoute: typeof DeenBuddyIndexRouteImport
+      parentRoute: typeof DeenBuddyRoute
+    }
     '/settings/notifications': {
       id: '/settings/notifications'
       path: '/settings/notifications'
@@ -172,28 +234,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsNotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/deen-buddy/$threadId': {
+      id: '/deen-buddy/$threadId'
+      path: '/$threadId'
+      fullPath: '/deen-buddy/$threadId'
+      preLoaderRoute: typeof DeenBuddyThreadIdRouteImport
+      parentRoute: typeof DeenBuddyRoute
+    }
+    '/api/deen-chat': {
+      id: '/api/deen-chat'
+      path: '/api/deen-chat'
+      fullPath: '/api/deen-chat'
+      preLoaderRoute: typeof ApiDeenChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
+
+interface DeenBuddyRouteChildren {
+  DeenBuddyThreadIdRoute: typeof DeenBuddyThreadIdRoute
+  DeenBuddyIndexRoute: typeof DeenBuddyIndexRoute
+}
+
+const DeenBuddyRouteChildren: DeenBuddyRouteChildren = {
+  DeenBuddyThreadIdRoute: DeenBuddyThreadIdRoute,
+  DeenBuddyIndexRoute: DeenBuddyIndexRoute,
+}
+
+const DeenBuddyRouteWithChildren = DeenBuddyRoute._addFileChildren(
+  DeenBuddyRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  DeenBuddyRoute: DeenBuddyRouteWithChildren,
   FavoritesRoute: FavoritesRoute,
   HamdNaatRoute: HamdNaatRoute,
   NamazRoute: NamazRoute,
   TasbihRoute: TasbihRoute,
+  ApiDeenChatRoute: ApiDeenChatRoute,
   SettingsNotificationsRoute: SettingsNotificationsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
