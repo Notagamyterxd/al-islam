@@ -119,7 +119,7 @@ function ChatInner({ threadId, initialMessages }: { threadId: string; initialMes
           ) : (
             messages.map((m) => (
               <Message key={m.id} from={m.role === "user" ? "user" : "assistant"}>
-                <MessageContent variant={m.role === "user" ? "contained" : "flat"}>
+                <MessageContent>
                   {m.parts.map((part, i) => {
                     if (part.type === "text") {
                       return m.role === "assistant" ? (
@@ -137,7 +137,7 @@ function ChatInner({ threadId, initialMessages }: { threadId: string; initialMes
 
           {status === "submitted" && (
             <Message from="assistant">
-              <MessageContent variant="flat">
+              <MessageContent className="bg-transparent px-0 py-0">
                 <Shimmer>Deen AI is thinking…</Shimmer>
               </MessageContent>
             </Message>
