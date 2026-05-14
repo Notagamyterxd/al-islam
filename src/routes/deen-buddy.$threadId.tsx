@@ -50,7 +50,7 @@ function ChatPage() {
     );
   }
 
-  return <ChatInner threadId={threadId} initialMessages={initial.messages as UIMessage[]} />;
+  return <ChatInner threadId={threadId} initialMessages={initial.messages as unknown as UIMessage[]} />;
 }
 
 function ChatInner({ threadId, initialMessages }: { threadId: string; initialMessages: UIMessage[] }) {
