@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.touch_chat_thread() FROM PUBLIC, anon, authenticated;
