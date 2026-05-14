@@ -16,6 +16,7 @@ import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsNotificationsRouteImport } from './routes/settings.notifications'
+import { Route as ApiDeenChatRouteImport } from './routes/api/deen-chat'
 
 const TasbihRoute = TasbihRouteImport.update({
   id: '/tasbih',
@@ -52,6 +53,11 @@ const SettingsNotificationsRoute = SettingsNotificationsRouteImport.update({
   path: '/settings/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiDeenChatRoute = ApiDeenChatRouteImport.update({
+  id: '/api/deen-chat',
+  path: '/api/deen-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/hamd-naat': typeof HamdNaatRoute
   '/namaz': typeof NamazRoute
   '/tasbih': typeof TasbihRoute
+  '/api/deen-chat': typeof ApiDeenChatRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/hamd-naat': typeof HamdNaatRoute
   '/namaz': typeof NamazRoute
   '/tasbih': typeof TasbihRoute
+  '/api/deen-chat': typeof ApiDeenChatRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/hamd-naat': typeof HamdNaatRoute
   '/namaz': typeof NamazRoute
   '/tasbih': typeof TasbihRoute
+  '/api/deen-chat': typeof ApiDeenChatRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/hamd-naat'
     | '/namaz'
     | '/tasbih'
+    | '/api/deen-chat'
     | '/settings/notifications'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/hamd-naat'
     | '/namaz'
     | '/tasbih'
+    | '/api/deen-chat'
     | '/settings/notifications'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/hamd-naat'
     | '/namaz'
     | '/tasbih'
+    | '/api/deen-chat'
     | '/settings/notifications'
   fileRoutesById: FileRoutesById
 }
@@ -118,6 +130,7 @@ export interface RootRouteChildren {
   HamdNaatRoute: typeof HamdNaatRoute
   NamazRoute: typeof NamazRoute
   TasbihRoute: typeof TasbihRoute
+  ApiDeenChatRoute: typeof ApiDeenChatRoute
   SettingsNotificationsRoute: typeof SettingsNotificationsRoute
 }
 
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsNotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/deen-chat': {
+      id: '/api/deen-chat'
+      path: '/api/deen-chat'
+      fullPath: '/api/deen-chat'
+      preLoaderRoute: typeof ApiDeenChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -182,8 +202,19 @@ const rootRouteChildren: RootRouteChildren = {
   HamdNaatRoute: HamdNaatRoute,
   NamazRoute: NamazRoute,
   TasbihRoute: TasbihRoute,
+  ApiDeenChatRoute: ApiDeenChatRoute,
   SettingsNotificationsRoute: SettingsNotificationsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
