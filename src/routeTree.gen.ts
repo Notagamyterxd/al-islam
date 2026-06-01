@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TasbihRouteImport } from './routes/tasbih'
 import { Route as NamazRouteImport } from './routes/namaz'
-import { Route as HamdNaatRouteImport } from './routes/hamd-naat'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as DeenBuddyRouteImport } from './routes/deen-buddy'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -29,11 +28,6 @@ const TasbihRoute = TasbihRouteImport.update({
 const NamazRoute = NamazRouteImport.update({
   id: '/namaz',
   path: '/namaz',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HamdNaatRoute = HamdNaatRouteImport.update({
-  id: '/hamd-naat',
-  path: '/hamd-naat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FavoritesRoute = FavoritesRouteImport.update({
@@ -82,7 +76,6 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/deen-buddy': typeof DeenBuddyRouteWithChildren
   '/favorites': typeof FavoritesRoute
-  '/hamd-naat': typeof HamdNaatRoute
   '/namaz': typeof NamazRoute
   '/tasbih': typeof TasbihRoute
   '/api/deen-chat': typeof ApiDeenChatRoute
@@ -94,7 +87,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/favorites': typeof FavoritesRoute
-  '/hamd-naat': typeof HamdNaatRoute
   '/namaz': typeof NamazRoute
   '/tasbih': typeof TasbihRoute
   '/api/deen-chat': typeof ApiDeenChatRoute
@@ -108,7 +100,6 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/deen-buddy': typeof DeenBuddyRouteWithChildren
   '/favorites': typeof FavoritesRoute
-  '/hamd-naat': typeof HamdNaatRoute
   '/namaz': typeof NamazRoute
   '/tasbih': typeof TasbihRoute
   '/api/deen-chat': typeof ApiDeenChatRoute
@@ -123,7 +114,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/deen-buddy'
     | '/favorites'
-    | '/hamd-naat'
     | '/namaz'
     | '/tasbih'
     | '/api/deen-chat'
@@ -135,7 +125,6 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/favorites'
-    | '/hamd-naat'
     | '/namaz'
     | '/tasbih'
     | '/api/deen-chat'
@@ -148,7 +137,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/deen-buddy'
     | '/favorites'
-    | '/hamd-naat'
     | '/namaz'
     | '/tasbih'
     | '/api/deen-chat'
@@ -162,7 +150,6 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DeenBuddyRoute: typeof DeenBuddyRouteWithChildren
   FavoritesRoute: typeof FavoritesRoute
-  HamdNaatRoute: typeof HamdNaatRoute
   NamazRoute: typeof NamazRoute
   TasbihRoute: typeof TasbihRoute
   ApiDeenChatRoute: typeof ApiDeenChatRoute
@@ -183,13 +170,6 @@ declare module '@tanstack/react-router' {
       path: '/namaz'
       fullPath: '/namaz'
       preLoaderRoute: typeof NamazRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/hamd-naat': {
-      id: '/hamd-naat'
-      path: '/hamd-naat'
-      fullPath: '/hamd-naat'
-      preLoaderRoute: typeof HamdNaatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/favorites': {
@@ -270,7 +250,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DeenBuddyRoute: DeenBuddyRouteWithChildren,
   FavoritesRoute: FavoritesRoute,
-  HamdNaatRoute: HamdNaatRoute,
   NamazRoute: NamazRoute,
   TasbihRoute: TasbihRoute,
   ApiDeenChatRoute: ApiDeenChatRoute,
