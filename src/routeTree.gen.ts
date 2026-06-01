@@ -9,17 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TechniquesRouteImport } from './routes/techniques'
 import { Route as TasbihRouteImport } from './routes/tasbih'
 import { Route as NamazRouteImport } from './routes/namaz'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as DeenBuddyRouteImport } from './routes/deen-buddy'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TechniquesIndexRouteImport } from './routes/techniques.index'
 import { Route as DeenBuddyIndexRouteImport } from './routes/deen-buddy.index'
+import { Route as TechniquesWuzuRouteImport } from './routes/techniques.wuzu'
+import { Route as TechniquesNamazRouteImport } from './routes/techniques.namaz'
 import { Route as SettingsNotificationsRouteImport } from './routes/settings.notifications'
 import { Route as DeenBuddyThreadIdRouteImport } from './routes/deen-buddy.$threadId'
 import { Route as ApiDeenChatRouteImport } from './routes/api/deen-chat'
 
+const TechniquesRoute = TechniquesRouteImport.update({
+  id: '/techniques',
+  path: '/techniques',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TasbihRoute = TasbihRouteImport.update({
   id: '/tasbih',
   path: '/tasbih',
@@ -50,10 +59,25 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TechniquesIndexRoute = TechniquesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TechniquesRoute,
+} as any)
 const DeenBuddyIndexRoute = DeenBuddyIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DeenBuddyRoute,
+} as any)
+const TechniquesWuzuRoute = TechniquesWuzuRouteImport.update({
+  id: '/wuzu',
+  path: '/wuzu',
+  getParentRoute: () => TechniquesRoute,
+} as any)
+const TechniquesNamazRoute = TechniquesNamazRouteImport.update({
+  id: '/namaz',
+  path: '/namaz',
+  getParentRoute: () => TechniquesRoute,
 } as any)
 const SettingsNotificationsRoute = SettingsNotificationsRouteImport.update({
   id: '/settings/notifications',
@@ -78,10 +102,14 @@ export interface FileRoutesByFullPath {
   '/favorites': typeof FavoritesRoute
   '/namaz': typeof NamazRoute
   '/tasbih': typeof TasbihRoute
+  '/techniques': typeof TechniquesRouteWithChildren
   '/api/deen-chat': typeof ApiDeenChatRoute
   '/deen-buddy/$threadId': typeof DeenBuddyThreadIdRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
+  '/techniques/namaz': typeof TechniquesNamazRoute
+  '/techniques/wuzu': typeof TechniquesWuzuRoute
   '/deen-buddy/': typeof DeenBuddyIndexRoute
+  '/techniques/': typeof TechniquesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -92,7 +120,10 @@ export interface FileRoutesByTo {
   '/api/deen-chat': typeof ApiDeenChatRoute
   '/deen-buddy/$threadId': typeof DeenBuddyThreadIdRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
+  '/techniques/namaz': typeof TechniquesNamazRoute
+  '/techniques/wuzu': typeof TechniquesWuzuRoute
   '/deen-buddy': typeof DeenBuddyIndexRoute
+  '/techniques': typeof TechniquesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -102,10 +133,14 @@ export interface FileRoutesById {
   '/favorites': typeof FavoritesRoute
   '/namaz': typeof NamazRoute
   '/tasbih': typeof TasbihRoute
+  '/techniques': typeof TechniquesRouteWithChildren
   '/api/deen-chat': typeof ApiDeenChatRoute
   '/deen-buddy/$threadId': typeof DeenBuddyThreadIdRoute
   '/settings/notifications': typeof SettingsNotificationsRoute
+  '/techniques/namaz': typeof TechniquesNamazRoute
+  '/techniques/wuzu': typeof TechniquesWuzuRoute
   '/deen-buddy/': typeof DeenBuddyIndexRoute
+  '/techniques/': typeof TechniquesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -116,10 +151,14 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/namaz'
     | '/tasbih'
+    | '/techniques'
     | '/api/deen-chat'
     | '/deen-buddy/$threadId'
     | '/settings/notifications'
+    | '/techniques/namaz'
+    | '/techniques/wuzu'
     | '/deen-buddy/'
+    | '/techniques/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -130,7 +169,10 @@ export interface FileRouteTypes {
     | '/api/deen-chat'
     | '/deen-buddy/$threadId'
     | '/settings/notifications'
+    | '/techniques/namaz'
+    | '/techniques/wuzu'
     | '/deen-buddy'
+    | '/techniques'
   id:
     | '__root__'
     | '/'
@@ -139,10 +181,14 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/namaz'
     | '/tasbih'
+    | '/techniques'
     | '/api/deen-chat'
     | '/deen-buddy/$threadId'
     | '/settings/notifications'
+    | '/techniques/namaz'
+    | '/techniques/wuzu'
     | '/deen-buddy/'
+    | '/techniques/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -152,12 +198,20 @@ export interface RootRouteChildren {
   FavoritesRoute: typeof FavoritesRoute
   NamazRoute: typeof NamazRoute
   TasbihRoute: typeof TasbihRoute
+  TechniquesRoute: typeof TechniquesRouteWithChildren
   ApiDeenChatRoute: typeof ApiDeenChatRoute
   SettingsNotificationsRoute: typeof SettingsNotificationsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/techniques': {
+      id: '/techniques'
+      path: '/techniques'
+      fullPath: '/techniques'
+      preLoaderRoute: typeof TechniquesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tasbih': {
       id: '/tasbih'
       path: '/tasbih'
@@ -200,12 +254,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/techniques/': {
+      id: '/techniques/'
+      path: '/'
+      fullPath: '/techniques/'
+      preLoaderRoute: typeof TechniquesIndexRouteImport
+      parentRoute: typeof TechniquesRoute
+    }
     '/deen-buddy/': {
       id: '/deen-buddy/'
       path: '/'
       fullPath: '/deen-buddy/'
       preLoaderRoute: typeof DeenBuddyIndexRouteImport
       parentRoute: typeof DeenBuddyRoute
+    }
+    '/techniques/wuzu': {
+      id: '/techniques/wuzu'
+      path: '/wuzu'
+      fullPath: '/techniques/wuzu'
+      preLoaderRoute: typeof TechniquesWuzuRouteImport
+      parentRoute: typeof TechniquesRoute
+    }
+    '/techniques/namaz': {
+      id: '/techniques/namaz'
+      path: '/namaz'
+      fullPath: '/techniques/namaz'
+      preLoaderRoute: typeof TechniquesNamazRouteImport
+      parentRoute: typeof TechniquesRoute
     }
     '/settings/notifications': {
       id: '/settings/notifications'
@@ -245,6 +320,22 @@ const DeenBuddyRouteWithChildren = DeenBuddyRoute._addFileChildren(
   DeenBuddyRouteChildren,
 )
 
+interface TechniquesRouteChildren {
+  TechniquesNamazRoute: typeof TechniquesNamazRoute
+  TechniquesWuzuRoute: typeof TechniquesWuzuRoute
+  TechniquesIndexRoute: typeof TechniquesIndexRoute
+}
+
+const TechniquesRouteChildren: TechniquesRouteChildren = {
+  TechniquesNamazRoute: TechniquesNamazRoute,
+  TechniquesWuzuRoute: TechniquesWuzuRoute,
+  TechniquesIndexRoute: TechniquesIndexRoute,
+}
+
+const TechniquesRouteWithChildren = TechniquesRoute._addFileChildren(
+  TechniquesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
@@ -252,9 +343,20 @@ const rootRouteChildren: RootRouteChildren = {
   FavoritesRoute: FavoritesRoute,
   NamazRoute: NamazRoute,
   TasbihRoute: TasbihRoute,
+  TechniquesRoute: TechniquesRouteWithChildren,
   ApiDeenChatRoute: ApiDeenChatRoute,
   SettingsNotificationsRoute: SettingsNotificationsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
