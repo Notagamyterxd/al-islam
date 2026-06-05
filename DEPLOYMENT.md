@@ -30,20 +30,18 @@ This app is a **TanStack Start** project (React 19 + Vite 7) with a Supabase bac
 
 ---
 
-## 3. Switch the build target to Vercel
+## 3. Switch the build target to Vercel (automated)
 
-The Lovable preview builds for Cloudflare Workers. The repo already ships with the Vercel-ready files — you just need to swap them in once:
+The Lovable preview builds for Cloudflare Workers. Just run the included setup script — it deletes `wrangler.jsonc`, swaps `vite.config.ts` for the Vercel-targeted version, and cleans Cloudflare-only deps out of `package.json`:
 
-1. Delete `wrangler.jsonc` (Cloudflare-only).
-2. Delete `vite.config.ts` and **rename `vite.config.vercel.ts` → `vite.config.ts`**.
-3. In `package.json`, remove these two Cloudflare-only deps:
-   - `@cloudflare/vite-plugin`
-   - `@lovable.dev/vite-tanstack-config`
-4. Reinstall:
-   ```bash
-   bun install
-   ```
-5. `vercel.json` is already in the repo with the correct build/output settings — leave it as is.
+```bash
+node scripts/setup-vercel.mjs
+bun install   # or: npm install
+```
+
+`vercel.json` is already in the repo with the correct build/output settings — leave it as is.
+
+> ⚠️ Do **not** run this script inside the Lovable editor — it will break the in-editor preview. Run it only after you've cloned/downloaded the repo locally.
 
 
 
